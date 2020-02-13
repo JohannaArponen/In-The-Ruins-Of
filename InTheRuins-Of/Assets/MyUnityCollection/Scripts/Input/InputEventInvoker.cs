@@ -10,7 +10,7 @@ public class InputEventInvoker : MonoBehaviour {
 
   public InputEvent[] inputEvents;
 
-  private List<InputEvent> fixedEvents;
+  private List<InputEvent> fixedEvents = new List<InputEvent>();
 
   [System.Serializable]
   public class InputEvent {
