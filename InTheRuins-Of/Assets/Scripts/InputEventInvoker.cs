@@ -6,7 +6,7 @@ public class InputEventInvoker : MonoBehaviour {
   public
 
   struct InputEvent {
-
+    public KeyCode key;
   }
 
   // Start is called before the first frame update
@@ -16,14 +16,9 @@ public class InputEventInvoker : MonoBehaviour {
 
   // Update is called once per frame
   void Update() {
-    if (Input.GetKeyDown(attack))
-      attackDown = true;
   }
 
   // Update is called once per frame
   void FixedUpdate() {
-    if (attackDown) {
-      attackDown = false;
-    }
   }
 }
