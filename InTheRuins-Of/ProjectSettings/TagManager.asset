@@ -14,10 +14,10 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - Bullet_Ignore
-  - 
-  - 
-  - 
+  - PlayerHurtBox
+  - PlayerHitBox
+  - EnemyHurtBox
+  - EnemyHitBox
   - 
   - 
   - 
