@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Malee;
 
 /// <summary>
 /// Create inputs that fire UnityEvents
 /// </summary>
 public class InputEventInvoker : MonoBehaviour {
 
-  public InputEvent[] inputEvents;
+  [Reorderable]
+  public InputEventList inputEvents;
 
+  [System.Serializable]
+  public class InputEventList : ReorderableArray<InputEvent> {
+  }
   private List<InputEvent> fixedEvents = new List<InputEvent>();
 
   [System.Serializable]
