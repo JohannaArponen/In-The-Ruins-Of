@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerWeaponHandler : MonoBehaviour {
+public class InputEventInvoker : MonoBehaviour {
+  public
+
+  struct InputEvent {
+    public KeyCode key;
+  }
+
   // Start is called before the first frame update
   void Start() {
 
@@ -10,11 +16,9 @@ public class PlayerWeaponHandler : MonoBehaviour {
 
   // Update is called once per frame
   void Update() {
-
   }
 
   // Update is called once per frame
   void FixedUpdate() {
-
   }
 }

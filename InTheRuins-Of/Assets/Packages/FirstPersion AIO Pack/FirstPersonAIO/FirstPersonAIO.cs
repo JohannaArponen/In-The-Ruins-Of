@@ -204,6 +204,8 @@ public class FirstPersonAIO : MonoBehaviour {
     public List<AudioClip> customClipSet;
   }
   public DynamicFootStep dynamicFootstep = new DynamicFootStep();
+  private bool chrouchDown;
+  private bool jumpDown;
 
   #endregion
 
@@ -338,6 +340,17 @@ public class BETA_SETTINGS{
     }
 
     #endregion
+    #region Input settings - Update
+
+    if (Input.GetKeyDown(_crouchModifiers.crouchKey)) {
+      chrouchDown = true;
+    }
+
+    if (Input.GetButtonDown("Jump")) {
+      jumpDown = true;
+    }
+
+    #endregion
 
     #region Movement Settings - Update
 
@@ -468,7 +481,8 @@ public class BETA_SETTINGS{
     if (inputXY.magnitude > 1) { inputXY.Normalize(); }
 
     float yv = fps_Rigidbody.velocity.y;
-    bool didJump = canHoldJump ? Input.GetButton("Jump") : Input.GetButtonDown("Jump");
+    bool didJump = canHoldJump ? Input.GetButton("Jump") : jumpDown;
+    jumpDown = false;
 
     if (!canJump) didJump = false;
 
@@ -494,8 +508,8 @@ public class BETA_SETTINGS{
     } */
 
     if (_crouchModifiers.useCrouch) {
-      if (!_crouchModifiers.toggleCrouch) { isCrouching = _crouchModifiers.crouchOverride || Input.GetKey(_crouchModifiers.crouchKey); } else { if (Input.GetKeyDown(_crouchModifiers.crouchKey)) { isCrouching = !isCrouching || _crouchModifiers.crouchOverride; } }
-
+      if (!_crouchModifiers.toggleCrouch) { isCrouching = _crouchModifiers.crouchOverride || Input.GetKey(_crouchModifiers.crouchKey); } else { if (chrouchDown) { isCrouching = !isCrouching || _crouchModifiers.crouchOverride; } }
+      chrouchDown = false;
       if (isCrouching) {
         capsule.height = Mathf.MoveTowards(capsule.height, _crouchModifiers.colliderHeight / 2, 5 * Time.deltaTime);
         walkSpeedInternal = walkSpeed * _crouchModifiers.crouchWalkSpeedMultiplier;
