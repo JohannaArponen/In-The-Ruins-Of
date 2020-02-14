@@ -426,11 +426,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   versionNum: 19.10.17f
   enableCameraMovement: 1
-  verticalRotationRange: 170
-  mouseSensitivity: 10
-  mouseSensitivityInternal: 10
+  verticalRotationRange: 180
+  mouseSensitivity: 8
+  mouseSensitivityInternal: 8
   fOVToMouseSensitivity: 1
-  cameraSmoothing: 5
+  cameraSmoothing: 1
   lockAndHideCursor: 0
   playerCamera: {fileID: 20724644957976244}
   enableCameraShake: 0
