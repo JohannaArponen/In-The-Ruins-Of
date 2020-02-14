@@ -9,12 +9,12 @@ using Malee;
 /// </summary>
 public class InputEventInvoker : MonoBehaviour {
 
+  [System.Serializable]
+  public class InputEventList : ReorderableArray<InputEvent> { }
   [Reorderable]
   public InputEventList inputEvents;
 
-  [System.Serializable]
-  public class InputEventList : ReorderableArray<InputEvent> {
-  }
+
   private List<InputEvent> fixedEvents = new List<InputEvent>();
 
   [System.Serializable]
