@@ -28,6 +28,7 @@ public class InputEventInvoker : MonoBehaviour {
 
   public enum Type {
     Held,
+    NotHeld,
     Down,
     Up,
   }
@@ -51,7 +52,9 @@ public class InputEventInvoker : MonoBehaviour {
         case Type.Held:
           activated = Input.GetKey(inputEvent.key);
           break;
-
+        case Type.NotHeld:
+          activated = !Input.GetKey(inputEvent.key);
+          break;
       }
       if (activated) {
         if (inputEvent.fixedUpdate) {
