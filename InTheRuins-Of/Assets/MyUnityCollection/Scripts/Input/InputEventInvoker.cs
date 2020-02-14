@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using Malee;
 
+[System.Serializable] public class StringEvent : UnityEvent<string> { }
+
 /// <summary>
 /// Create inputs that fire UnityEvents
 /// </summary>
