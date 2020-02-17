@@ -5,6 +5,12 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider))]
 public class OnTriggerEvent : MonoBehaviour {
+  [Tooltip("Require collider to have specific tag for it to trigger the events")]
+  public bool filterTag;
+  [MyBox.ConditionalField(nameof(filterTag))]
+  [MyBox.Tag]
+  [Tooltip("The required tag for colliders")]
+  public string filteredTag;
   [Tooltip("Invoked when " + nameof(OnTriggerEnter) + " is triggered")]
   public TriggerUnityEvent enterEvent;
   [Tooltip("Invoked when " + nameof(OnTriggerStay) + " is triggered")]
@@ -27,7 +33,19 @@ public class OnTriggerEvent : MonoBehaviour {
     print(col);
   }
 
-  void OnTriggerEnter(Collider col) => enterEvent.Invoke(col);
-  void OnTriggerExit(Collider col) => exitEvent.Invoke(col);
-  void OnTriggerStay(Collider col) => stayEvent.Invoke(col);
+  void OnTriggerEnter(Collider col) {
+    if (!filterTag || col.tag == filteredTag) {
+      stayEvent.Invoke(col);
+    }
+  }
+  void OnTriggerExit(Collider col) {
+    if (!filterTag || col.tag == filteredTag) {
+      stayEvent.Invoke(col);
+    }
+  }
+  void OnTriggerStay(Collider col) {
+    if (!filterTag || col.tag == filteredTag) {
+      stayEvent.Invoke(col);
+    }
+  }
 }
