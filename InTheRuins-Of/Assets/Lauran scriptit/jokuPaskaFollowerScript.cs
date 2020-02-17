@@ -7,7 +7,7 @@ public class jokuPaskaFollowerScript : MonoBehaviour
     public Transform mTarget;
     float mSpeed = 10.0f;
     Vector3 mLookDirection;
-    const float EPSILON = 1.0f;
+    const float EPSILON = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
