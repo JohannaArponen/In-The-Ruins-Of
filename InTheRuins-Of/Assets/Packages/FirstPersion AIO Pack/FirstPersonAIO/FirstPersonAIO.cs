@@ -5,6 +5,7 @@
 ///
 /// DATE || msg: "" || Author Signature: SNG || version VERSION
 ///
+/// 17/02/20 || msg: "Fixed input checking being done in FixedUpdate, causing incosistent jumping and crouching." || Author Signature: Samuel Förström || version: 19.9.20f >> 19.9.21f 
 /// 10/17/19 || msg: "Fixed inconsistant jumping/ground detection. Fixed headbobing axis amplification. Added toggle crouching." || Author Signature: Aedan Graves || version: 19.9.20f >> 19.10.17f 
 /// 09/20/19 || msg: "Added support Email to the bottom of the inspector. Fixed issues with sticking to the walls. Removed the need for external assigning of a min and max friction material" || Author Signature: Aedan Graves || version: 19.9.13 >> 19.9.20f
 /// 09/13/19 || msg: "New Editor script, Fixed Stamina, Fixed Crouching, Put 'FOV Kick' Under reconstruction, made dynamic foot steps easier to understand." || Author Signature: Aedan Graves || version: 19.7.28cu >> 19.9.13cu
@@ -53,7 +54,7 @@ using UnityEditor;
 
 public class FirstPersonAIO : MonoBehaviour {
 
-  public string versionNum = "19.10.17f";
+  public string versionNum = "19.10.21f";
 
   #region Variables
 
@@ -141,6 +142,8 @@ public class FirstPersonAIO : MonoBehaviour {
   Vector2 inputXY;
   public bool isCrouching;
   bool isSprinting = false;
+  private bool chrouchDown;
+  private bool jumpDown;
 
   public Rigidbody fps_Rigidbody;
 
@@ -204,8 +207,6 @@ public class FirstPersonAIO : MonoBehaviour {
     public List<AudioClip> customClipSet;
   }
   public DynamicFootStep dynamicFootstep = new DynamicFootStep();
-  private bool chrouchDown;
-  private bool jumpDown;
 
   #endregion
 
