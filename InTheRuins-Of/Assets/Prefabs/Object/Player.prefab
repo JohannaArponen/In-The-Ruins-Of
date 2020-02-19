@@ -435,7 +435,7 @@ MonoBehaviour:
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
-              m_StringArgument: Swing1
+              m_StringArgument: Swing2
               m_BoolArgument: 0
             m_CallState: 2
 --- !u!1001 &2161548114079567444
@@ -445,6 +445,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4288335847994348}
     m_Modifications:
+    - target: {fileID: 879054663, guid: c232df654614abb449772ed3630b0c24, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 1771744432112636746, guid: c232df654614abb449772ed3630b0c24,
         type: 3}
       propertyPath: m_Name
