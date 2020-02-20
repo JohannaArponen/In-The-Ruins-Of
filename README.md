@@ -50,6 +50,6 @@
 - Name your materials and meshes in your horrible modelling software, you will need to do this in the future anyways. They are otherwise added to the list of assets with their default name e.g. "no name", cluttering the asset list and workspace.
 
 - Make sure your models pivot is in a logical place (aling your model to the center aka the point at 0, 0, 0).
-  ![](https://i.imgur.com/NPSnZvx.png =250x)
+  ![](https://i.imgur.com/NPSnZvx.png)
   Pivot = thing with arrows. Here it should probably be at the center of the disc.
 
