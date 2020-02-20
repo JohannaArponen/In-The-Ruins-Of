@@ -22,7 +22,7 @@
 - Put your thing of type X into the folder of type X. If your thing is unique enough and there are more things that have the same uniqueness, make a new folder for those kind of things under the X folder.
 
 - Don't make a folder named X under a folder named X
-![]([https://i.imgur.com/JhYeG6C.png](https://i.imgur.com/JhYeG6C.png)) 
+![](https://i.imgur.com/JhYeG6C.png) 
 
 - Scenes should probably not consist of one massive prefab named "whole ass level".
 
