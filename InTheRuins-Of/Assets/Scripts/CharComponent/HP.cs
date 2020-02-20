@@ -1,88 +1,76 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class HP : MonoBehaviour {
-  public float health = 1;
-  public bool invulnerable;
 
-  [Tooltip("After add or substract health. (" + nameof(HP) + " component, real change, wanted change)")]
-  public PostHealthAdd postHealthAdd;
+  [SerializeField] protected float _health = 1;
+  public float health { get => _health; protected set => _health = value; }
 
-  [Tooltip("After set health. (" + nameof(HP) + " component, original value)")]
-  public OnHealthSetEvent onHealthSet;
+  public float prevHealth { get; protected set; }
 
-  [Tooltip("Invoked after any change to health. Values passed: (" + nameof(HP) + " component, original value)")]
-  public OnHealthEvent onHealth;
-
-  private List<Modifier> modifiers = new List<Modifier>();
+  [Tooltip("Invoked in LateUpdate if health was changed. HP")]
+  public OnChangeEvent onChange;
+  [System.Serializable] public class OnChangeEvent : UnityEvent<HP> { }
 
 
-  [System.Serializable] public class PostHealthAdd : UnityEvent<HP, float, float> { }
-  [System.Serializable] public class OnHealthSetEvent : UnityEvent<HP, float> { }
-  [System.Serializable] public class OnHealthEvent : UnityEvent<HP, float> { }
+  [Tooltip("Invoked after taking damage. HP, Damage, Filtered damage")]
+  public OnDamageEvent onDamage;
+  [System.Serializable] public class OnDamageEvent : UnityEvent<HP, float, float> { }
 
-  #region Parameter Implementation
+  [Tooltip("Invoked after any heal. HP, Heal, Filtered heal")]
+  public OnHealEvent onHeal;
+  [System.Serializable] public class OnHealEvent : UnityEvent<HP, float, float> { }
 
-  public delegate float ModifierHandler(HP hp, float change);
-  private class Modifier {
-    public Modifier(float priority, ModifierHandler handler) {
+  [Tooltip("Invoked after health being set. HP, Value, Filtered value")]
+  public OnSetEvent onSet;
+  [System.Serializable] public class OnSetEvent : UnityEvent<HP, float, float> { }
+
+
+  public FilterList<Func<HP, float, float>> damageFilters = new FilterList<Func<HP, float, float>>();
+  public FilterList<Func<HP, float, float>> healFilters = new FilterList<Func<HP, float, float>>();
+  public FilterList<Func<HP, float, float>> setFilters = new FilterList<Func<HP, float, float>>();
+
+  public class Filter<T> where T : Delegate {
+    public Filter(float priority, T function) {
       this.priority = priority;
-      this.handler = handler;
+      this.function = function;
     }
-
     public float priority = 0;
-    public ModifierHandler handler;
+    public T function;
   }
 
-  private bool invoking = false;
-
-  #endregion
-
-
-  #region Methods
-
-  public void AddHealth(float change) {
-    if (invoking) {
-      health = health + change;
-      return;
-    } else if (invulnerable) return;
-
-    var old = health;
-
-    var modChange = change;
-
-    foreach (var cb in modifiers) modChange = cb.handler(this, modChange);
-
-    invoking = true;
-    postHealthAdd.Invoke(this, modChange, change);
-    invoking = false;
-
-    onHealth.Invoke(this, old);
+  void Start() {
+    prevHealth = _health;
   }
 
-  public void SetHealth(float value) {
-    var old = health;
-    health = value;
-    onHealthSet.Invoke(this, old);
-
-    onHealth.Invoke(this, old);
+  void LateUpdate() {
+    if (prevHealth == health) return;
+    onChange.Invoke(this);
+    prevHealth = health;
   }
 
-  /// <summary> Modifies the change value when using AddHealth <summary/>
-  public void AddModifier(float priority, ModifierHandler handler) {
-    var modifier = new Modifier(priority, handler);
-    for (int i = 0; i < modifiers.Count; i++) {
-      var mod = modifiers[i];
-      if (mod.priority <= priority) {
-        modifiers.Insert(i, modifier);
-        return;
-      }
-    }
-    modifiers.Add(modifier);
+
+  public void Damage(float damage) {
+    var filtered = damage;
+    foreach (var filter in damageFilters) filtered = filter.function(this, filtered);
+    health -= filtered;
+    onDamage.Invoke(this, damage, filtered);
   }
 
-  #endregion
+  public void Heal(float healing) {
+    var filtered = healing;
+    foreach (var filter in healFilters) filtered = filter.function(this, filtered);
+    health += filtered;
+    onHeal.Invoke(this, healing, filtered);
+  }
 
+  public void Set(float value) {
+    var filtered = value;
+    foreach (var filter in setFilters) filtered = filter.function(this, filtered);
+    health = filtered;
+    onSet.Invoke(this, value, filtered);
+  }
 }
