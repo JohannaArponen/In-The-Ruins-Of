@@ -16,6 +16,7 @@
 ## Unity
 
 - Make assets with meaningful names. Most assets will populate the search windows. Having 100 no names or texture #XX's is detrimental when looking for a specific asset.
+- If you don't use a unique material for your model, you can simple assing it an already existing one in the import settings of the model. This disables the import of the "no name" material.
 ![enter image description here](https://i.imgur.com/2MPtrrp.png)
 
 - Put your thing of type X into the folder of type X. If your thing is unique enough and there are more things that have the same uniqueness, make a new folder for those kind of things under the X folder.
