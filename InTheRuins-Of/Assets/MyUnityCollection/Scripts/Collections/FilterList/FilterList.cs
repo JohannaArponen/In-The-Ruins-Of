@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-public class FilterList<T> where T : Delegate {
+public class FilterList<T> {
 
   public int Count { get => filters.Count; }
   public Filter this[int index] { get => filters[index]; set => filters[index] = value; }
@@ -38,17 +38,18 @@ public class FilterList<T> where T : Delegate {
   protected List<Filter> filters;
 
   public class Filter {
-    public Filter(float priority, T function) {
+    public Filter(float priority, Func<T, T> function) {
       this.priority = priority;
       this.function = function;
     }
     public float priority = 0;
-    public T function;
+    public Func<T, T> function;
   }
 
-  // public T ExecuteFilters(T value) {
-  //   foreach (var filter in filters) filter.function(value);
-  // }
+  public T Apply(T value) {
+    foreach (var filter in filters) value = filter.function(value);
+    return value;
+  }
 
   public void AddRange(IEnumerable<Filter> filters) { foreach (var filter in filters) Add(filter); }
 

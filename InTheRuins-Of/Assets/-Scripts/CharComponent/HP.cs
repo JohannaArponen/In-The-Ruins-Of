@@ -29,9 +29,9 @@ public class HP : MonoBehaviour {
   [System.Serializable] public class OnSetEvent : UnityEvent<HP, float, float> { }
 
 
-  public FilterList<Func<HP, float, float>> damageFilters = new FilterList<Func<HP, float, float>>();
-  public FilterList<Func<HP, float, float>> healFilters = new FilterList<Func<HP, float, float>>();
-  public FilterList<Func<HP, float, float>> setFilters = new FilterList<Func<HP, float, float>>();
+  public FilterList<float> damageFilters = new FilterList<float>();
+  public FilterList<float> healFilters = new FilterList<float>();
+  public FilterList<float> setFilters = new FilterList<float>();
 
   public class Filter<T> where T : Delegate {
     public Filter(float priority, T function) {
@@ -54,22 +54,19 @@ public class HP : MonoBehaviour {
 
 
   public void Damage(float damage) {
-    var filtered = damage;
-    foreach (var filter in damageFilters) filtered = filter.function(this, filtered);
+    var filtered = damageFilters.Apply(damage);
     health -= filtered;
     onDamage.Invoke(this, damage, filtered);
   }
 
   public void Heal(float healing) {
-    var filtered = healing;
-    foreach (var filter in healFilters) filtered = filter.function(this, filtered);
+    var filtered = healFilters.Apply(healing);
     health += filtered;
     onHeal.Invoke(this, healing, filtered);
   }
 
   public void Set(float value) {
-    var filtered = value;
-    foreach (var filter in setFilters) filtered = filter.function(this, filtered);
+    var filtered = setFilters.Apply(value);
     health = filtered;
     onSet.Invoke(this, value, filtered);
   }
