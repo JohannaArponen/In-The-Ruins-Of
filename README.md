@@ -2,6 +2,7 @@
 # Anti Retardation Docket
 
 ###### DISCLAIMER: These are merely suggestions, if you want to make others' lives harder, you can completely ignore these!
+Im definitely fucking fuuuuumiiing
 
 ## General
 
@@ -16,12 +17,13 @@
 ## Unity
 
 - Make assets with meaningful names. Most assets will populate the search windows. Having 100 no names or texture #XX's is detrimental when looking for a specific asset.
+- If you don't use a unique material for your model, you can simple assing it an already existing one in the import settings of the model. This disables the import of the "no name" material.
 ![enter image description here](https://i.imgur.com/2MPtrrp.png)
 
 - Put your thing of type X into the folder of type X. If your thing is unique enough and there are more things that have the same uniqueness, make a new folder for those kind of things under the X folder.
 
 - Don't make a folder named X under a folder named X
-![]([https://i.imgur.com/JhYeG6C.png](https://i.imgur.com/JhYeG6C.png)) 
+![](https://i.imgur.com/JhYeG6C.png) 
 
 - Scenes should probably not consist of one massive prefab named "whole ass level".
 
@@ -50,6 +52,6 @@
 - Name your materials and meshes in your horrible modelling software, you will need to do this in the future anyways. They are otherwise added to the list of assets with their default name e.g. "no name", cluttering the asset list and workspace.
 
 - Make sure your models pivot is in a logical place (aling your model to the center aka the point at 0, 0, 0).
-  ![](https://i.imgur.com/NPSnZvx.png =250x)
+  ![](https://i.imgur.com/NPSnZvx.png)
   Pivot = thing with arrows. Here it should probably be at the center of the disc.
 
