@@ -38,12 +38,12 @@ public class FilterList<T> {
   protected List<Filter> filters;
 
   public class Filter {
-    public Filter(float priority, Func<T, T> function) {
-      this.priority = priority;
+    public Filter(Func<T, T> function, float priority = 0) {
       this.function = function;
+      this.priority = priority;
     }
-    public float priority = 0;
     public Func<T, T> function;
+    public float priority = 0;
   }
 
   public T Apply(T value) {
@@ -53,6 +53,7 @@ public class FilterList<T> {
 
   public void AddRange(IEnumerable<Filter> filters) { foreach (var filter in filters) Add(filter); }
 
+  public void Add(Func<T, T> function, float priority = 0) => Add(new Filter(function, priority));
   public void Add(Filter filter) {
     for (int i = 0; i < filters.Count; i++) {
       var other = filters[i];
