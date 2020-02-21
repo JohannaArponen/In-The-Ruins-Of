@@ -17,8 +17,7 @@ public class NewBehaviourScript : MonoBehaviour {
   void DamageObject(Collider col, float damage) => DamageObject(col.gameObject, damage);
   void DamageObject(GameObject col, float damage) {
     var hp = GetComponent<HP>();
-    if (!hp || hp.invulnerable) return;
-
-    hp.health -= damage;
+    if (!hp) return;
+    hp.Damage(damage);
   }
 }
