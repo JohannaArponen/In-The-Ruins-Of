@@ -121,6 +121,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: af2cd5d6c9a2f3b4ca781089641270d0, type: 2}
+--- !u!114 &462775012 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 375143256464825018, guid: 3ef8c80967e9cda4ab4985a09c96b70f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6162847839771809508}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &788532863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,7 +241,7 @@ MonoBehaviour:
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 73dbef19126b9034f882406ab0a6929a,
+          m_ObjectArgument: {fileID: 2100000, guid: 5d422720e88503448ade9fca9670c405,
             type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
@@ -267,6 +279,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 462775012}
+        m_MethodName: set_text
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: PRESS E TO TEST
+          m_BoolArgument: 0
+        m_CallState: 2
   onActive:
     m_PersistentCalls:
       m_Calls:
@@ -291,6 +314,17 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 2100000, guid: 9f9db0eba08dcbd4b94c45930159b019,
             type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 462775012}
+        m_MethodName: set_text
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
