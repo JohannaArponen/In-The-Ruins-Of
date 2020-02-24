@@ -563,6 +563,22 @@ MonoBehaviour:
   duration: 0
   highDamageOverride: 1
   hp: {fileID: 0}
+--- !u!114 &1730033710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730033706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1cb7b3f49992c409e9349a3fea31c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stamina: 1
+  maximum: 1
+  regenPerSec: 1
+  regenDelay: 0.5
 --- !u!23 &1730033713 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6205416407377811456, guid: 6f0d36941c9984943bdf7df4c26a17a7,

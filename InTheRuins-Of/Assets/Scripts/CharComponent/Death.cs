@@ -5,12 +5,8 @@ using UnityEngine.Events;
 
 public class Death : MonoBehaviour {
 
-  [SerializeField]
+  [SerializeField, Candlelight.PropertyBackingField]
   protected bool _dead = false;
-  public HP hp;
-  [Tooltip("Negate healing when dead")]
-  public bool restrictHealing = true;
-  [SerializeField]
   public bool dead {
     get => _dead;
     protected set {
@@ -18,8 +14,15 @@ public class Death : MonoBehaviour {
       if (value) onDeath.Invoke(gameObject);
       else onRevive.Invoke(gameObject);
       _dead = value;
+      print("nam");
     }
   }
+
+  public HP hp;
+
+  [Tooltip("Negate healing when dead")]
+  public bool restrictHealing = true;
+
   public OnDeathStateChangeEvent onDeath;
   public OnDeathStateChangeEvent onRevive;
 
