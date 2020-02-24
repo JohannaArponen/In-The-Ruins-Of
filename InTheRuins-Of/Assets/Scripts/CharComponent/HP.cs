@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace CharacterComponentSystem {
   public class HP : MonoBehaviour {
 
-    [SerializeField, Candlelight.PropertyBackingField]
+    [SerializeField]
     protected float _health = 1;
     public float health { get => _health; protected set => _health = value; }
     public float prevHealth { get; protected set; }

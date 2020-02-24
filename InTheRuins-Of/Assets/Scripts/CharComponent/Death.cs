@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace CharacterComponentSystem {
   public class Death : MonoBehaviour {
 
-    [SerializeField, Candlelight.PropertyBackingField]
+    [SerializeField]
     protected bool _dead = false;
     public bool dead {
       get => _dead;

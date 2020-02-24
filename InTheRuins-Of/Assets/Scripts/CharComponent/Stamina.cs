@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CharacterComponentSystem {
   public class Stamina : MonoBehaviour {
-    [SerializeField, Candlelight.PropertyBackingField]
+    [SerializeField]
     protected float _stamina = 1;
     public float stamina { get => _stamina; protected set => _stamina = value; }
     public float maximum = 1;
