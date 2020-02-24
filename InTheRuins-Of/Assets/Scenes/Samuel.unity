@@ -579,6 +579,24 @@ MonoBehaviour:
   maximum: 1
   regenPerSec: 1
   regenDelay: 0.5
+--- !u!114 &1730033711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730033706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6b337eb68682547a6ee83768866eac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 1
+  key: 101
+  type: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!23 &1730033713 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6205416407377811456, guid: 6f0d36941c9984943bdf7df4c26a17a7,
