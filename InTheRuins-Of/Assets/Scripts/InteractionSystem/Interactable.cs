@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace InteractionSystem {
-  [RequireComponent(typeof(Collider2D))]
+  [RequireComponent(typeof(Collider))]
   public class Interactable : MonoBehaviour {
 
     [Tooltip("When the interactable gains focus")]

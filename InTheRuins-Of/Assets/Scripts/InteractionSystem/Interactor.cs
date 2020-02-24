@@ -44,8 +44,8 @@ namespace InteractionSystem {
         // Check if targetting something valid and do appropriate things
         Debug.DrawRay(transform.position, transform.forward * distance);
         RaycastHit hit;
+        var prevInteractable = interactable;
         if (Physics.Raycast(transform.position, transform.forward * distance, out hit, distance, mask)) {
-          var prevInteractable = interactable;
           // If hit interactable object
           if (hit.collider.TryGetComponent(out interactable)) {
             if (Input.GetKeyDown(key)) {
@@ -64,10 +64,15 @@ namespace InteractionSystem {
               }
             }
           } else {
-            // Nothing was hit. Untarget if necessary
+            // No Interactable was hit. Untarget if necessary
             if (prevInteractable && prevInteractable.targeted) {
               prevInteractable.Untarget();
             }
+          }
+        } else {
+          // Nothing was hit. Untarget if necessary
+          if (prevInteractable && prevInteractable.targeted) {
+            prevInteractable.Untarget();
           }
         }
       }
