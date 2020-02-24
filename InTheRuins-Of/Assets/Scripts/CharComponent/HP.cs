@@ -8,39 +8,30 @@ public class HP : MonoBehaviour {
 
   [SerializeField] protected float _health = 1;
   public float health { get => _health; protected set => _health = value; }
-
   public float prevHealth { get; protected set; }
 
   [Tooltip("Invoked in LateUpdate if health was changed. HP")]
   public OnChangeEvent onChange;
   [System.Serializable] public class OnChangeEvent : UnityEvent<HP> { }
 
-
-  [Tooltip("Invoked after taking damage. HP, Damage, Filtered damage")]
+  [Tooltip("Invoked after taking damage. HP, Damage, Modified damage")]
   public OnDamageEvent onDamage;
   [System.Serializable] public class OnDamageEvent : UnityEvent<HP, float, float> { }
 
-  [Tooltip("Invoked after any heal. HP, Heal, Filtered heal")]
+  [Tooltip("Invoked after any heal. HP, Heal, Modified heal")]
   public OnHealEvent onHeal;
   [System.Serializable] public class OnHealEvent : UnityEvent<HP, float, float> { }
 
-  [Tooltip("Invoked after health being set. HP, Value, Filtered value")]
+  [Tooltip("Invoked after health being set. HP, Value, Modified value")]
   public OnSetEvent onSet;
   [System.Serializable] public class OnSetEvent : UnityEvent<HP, float, float> { }
 
 
-  public FilterList<float> damageFilters = new FilterList<float>();
-  public FilterList<float> healFilters = new FilterList<float>();
-  public FilterList<float> setFilters = new FilterList<float>();
+  public ModifierList<float> damageModifiers = new ModifierList<float>();
+  public ModifierList<float> healModifiers = new ModifierList<float>();
+  public ModifierList<float> setModifiers = new ModifierList<float>();
 
-  public class Filter<T> where T : Delegate {
-    public Filter(float priority, T function) {
-      this.priority = priority;
-      this.function = function;
-    }
-    public float priority = 0;
-    public T function;
-  }
+  public static implicit operator float(HP hp) => hp.health;
 
   void Start() {
     prevHealth = _health;
@@ -52,22 +43,31 @@ public class HP : MonoBehaviour {
     prevHealth = health;
   }
 
+  [MyBox.ButtonMethod]
+  public void DamageTest() => Damage(1);
+  [MyBox.ButtonMethod]
+  public void HealTest() => Heal(1);
+  [MyBox.ButtonMethod]
+  public void SetTest() => Set(10);
 
+  /// <summary> Substracts `damage` from health </summary>
   public void Damage(float damage) {
-    var filtered = damageFilters.Apply(damage);
-    health -= filtered;
-    onDamage.Invoke(this, damage, filtered);
+    var mod = damageModifiers.Apply(damage);
+    health -= mod;
+    onDamage.Invoke(this, damage, mod);
   }
 
+  /// <summary> Adds `healing` to health </summary>
   public void Heal(float healing) {
-    var filtered = healFilters.Apply(healing);
-    health += filtered;
-    onHeal.Invoke(this, healing, filtered);
+    var mod = healModifiers.Apply(healing);
+    health += mod;
+    onHeal.Invoke(this, healing, mod);
   }
 
+  /// <summary> Sets the value of health to `value` </summary>
   public void Set(float value) {
-    var filtered = setFilters.Apply(value);
-    health = filtered;
-    onSet.Invoke(this, value, filtered);
+    var mod = setModifiers.Apply(value);
+    health = mod;
+    onSet.Invoke(this, value, mod);
   }
 }
