@@ -257,7 +257,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: PRESS E TO TEST
           m_BoolArgument: 0
         m_CallState: 2
   onUntarget:
@@ -607,6 +607,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114051214696948948, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
+        type: 3}
+      propertyPath: useStamina
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2113607344916041907, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2113607346238962771, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2161548113343775005, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2161548113343775007, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e62f5703e5f8d2488a5e1bc8433be41, type: 3}
 --- !u!1 &1633263108
@@ -819,12 +844,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6b337eb68682547a6ee83768866eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 1
-  key: 101
-  type: 0
+  maxDistance: 2
+  rayLength: 3
   mask:
     serializedVersion: 2
     m_Bits: 0
+  key: 101
+  type: 0
+  deactivationRules:
+    sigth: 1
+    distance: 1
+    angle: 360
 --- !u!23 &1730033713 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6205416407377811456, guid: 6f0d36941c9984943bdf7df4c26a17a7,
