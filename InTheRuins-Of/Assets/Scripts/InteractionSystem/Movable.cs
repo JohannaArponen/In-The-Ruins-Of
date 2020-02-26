@@ -7,7 +7,7 @@ using Unity.Mathematics;
 namespace InteractionSystem {
   [RequireComponent(typeof(Interactable))]
   [RequireComponent(typeof(Rigidbody))]
-  public class Throwable : MonoBehaviour {
+  public class Movable : MonoBehaviour {
 
     [MyBox.PositiveValueOnly, GetSet("sampleCount"), Tooltip(
       "The maximum amount of samples to take from previous positions for velocity calculation. " +

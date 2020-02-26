@@ -22,7 +22,7 @@ namespace InteractionSystem {
 
     public static implicit operator bool(Interaction interaction) => interaction != null;
 
-    public Interaction(Interactor source, Interactable target) => new Interaction(source, target, Time.time);
+    public Interaction(Interactor source, Interactable target) : this(source, target, Time.time) { }
     public Interaction(Interactor source, Interactable target, float startTime) {
       this.source = source;
       this.target = target;

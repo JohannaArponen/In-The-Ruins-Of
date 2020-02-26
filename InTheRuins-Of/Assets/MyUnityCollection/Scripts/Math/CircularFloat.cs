@@ -1,27 +1,31 @@
 ﻿
-/// <summary> Creates a float which loops after the specified maximum value to zero </summary>
+/// <summary> A float which loops from the specified threshold value to zero. The value never reaches the threshold. </summary>
 public readonly struct CircularFloat {
 
   public readonly float value;
-  public readonly float max;
+  public readonly float ceil;
 
-  public static CircularFloat operator +(CircularFloat a, float b) => new CircularFloat(a.value + b, a.max);
-  public static CircularFloat operator -(CircularFloat a, float b) => new CircularFloat(a.value - b, a.max);
+  public static CircularFloat operator +(CircularFloat a, float b) => new CircularFloat(a.value + b, a.ceil);
+  public static CircularFloat operator ++(CircularFloat a) => new CircularFloat(a.value + 1, a.ceil);
+  public static CircularFloat operator -(CircularFloat a, float b) => new CircularFloat(a.value - b, a.ceil);
+  public static CircularFloat operator --(CircularFloat a) => new CircularFloat(a.value + 1, a.ceil);
 
   public static explicit operator int(CircularFloat a) => (int)a.value;
   public static implicit operator float(CircularFloat a) => a.value;
   public static implicit operator double(CircularFloat a) => a.value;
   public static explicit operator decimal(CircularFloat a) => (decimal)a.value;
 
-  /// <summary> Creates an integer value which loops after the maximum to zero </summary>
-  public CircularFloat(float value, float max) {
+  /// <summary> Creates an integer value which loops from threshold to zero. The value never reaches the threshold. </summary>
+  public CircularFloat(float value, float threshold) {
 
-    if (max <= 0) throw new System.Exception($"Max value for {nameof(CircularFloat)} must be higher than zero");
+    if (threshold <= 0) throw new System.Exception($"Max value for {nameof(CircularFloat)} must be higher than zero");
 
-    if (value > max) value = value % max;
-    else if (value < 0) value = max + value % max;
+    if (value >= threshold) value = value == threshold ? 0 : value % threshold;
+    else if (value < 0) value = threshold + value % threshold;
 
     this.value = value;
-    this.max = max;
+    this.ceil = threshold;
   }
+
+  public new string ToString() => value.ToString();
 }

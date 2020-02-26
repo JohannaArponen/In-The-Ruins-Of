@@ -1,12 +1,14 @@
 ﻿
-/// <summary> Creates an integer which loops after the specified maximum value to zero </summary>
+/// <summary> An integer which loops from the specified threshold value to zero. The value never reaches the threshold. </summary>
 public readonly struct CircularInt {
 
   public readonly int value;
-  public readonly int max;
+  public readonly int ceil;
 
-  public static CircularInt operator +(CircularInt a, int b) => new CircularInt(a.value + b, a.max);
-  public static CircularInt operator -(CircularInt a, int b) => new CircularInt(a.value - b, a.max);
+  public static CircularInt operator +(CircularInt a, int b) => new CircularInt(a.value + b, a.ceil);
+  public static CircularInt operator ++(CircularInt a) => new CircularInt(a.value + 1, a.ceil);
+  public static CircularInt operator -(CircularInt a, int b) => new CircularInt(a.value - b, a.ceil);
+  public static CircularInt operator --(CircularInt a) => new CircularInt(a.value - 1, a.ceil);
 
   public static implicit operator int(CircularInt a) => a.value;
   public static implicit operator float(CircularInt a) => a.value;
@@ -14,15 +16,17 @@ public readonly struct CircularInt {
   public static implicit operator decimal(CircularInt a) => a.value;
 
 
-  /// <summary> Creates an integer value which loops after the maximum to zero </summary>
-  public CircularInt(int value, int max) {
+  /// <summary> Creates an integer value which loops from threshold to zero. The value never reaches the threshold. </summary>
+  public CircularInt(int value, int threshold) {
 
-    if (max <= 0) throw new System.Exception($"Max value for {nameof(CircularInt)} must be higher than zero");
+    if (threshold <= 0) throw new System.Exception($"Max value for {nameof(CircularInt)} must be higher than zero");
 
-    if (value > max) value = value % max;
-    else if (value < 0) value = max + value % max;
+    if (value >= threshold) value = value == threshold ? 0 : value % threshold;
+    else if (value < 0) value = threshold + value % threshold;
 
     this.value = value;
-    this.max = max;
+    this.ceil = threshold;
   }
+
+  public new string ToString() => value.ToString();
 }

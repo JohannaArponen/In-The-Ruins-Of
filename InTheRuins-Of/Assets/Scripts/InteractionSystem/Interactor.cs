@@ -25,24 +25,22 @@ namespace InteractionSystem {
     public Type type = Type.Hold;
     public enum Type { Hold, Toggle, Instant }
 
-    public DeactivationRules deactivationRules;
+    public DeactivationRules restrictions;
     [System.Serializable]
     public class DeactivationRules {
       [Tooltip("Deactivate if the raycast no longer hits the " + nameof(Interactable))]
       public bool sigth = true;
 
-      [MyBox.ConditionalField(nameof(sigth), true)]
       [Tooltip("Deactivate " + nameof(Interactable) + " if the maximum distance is exeeded")]
       public bool distance = true;
 
-      [Tooltip("Deactivate if the angle towards " + nameof(Interactable) + " exeeds this"), Range(0, 360)]
-      public float angle = 360f;
+      [Tooltip("Deactivate if the angle towards " + nameof(Interactable) + " exeeds this"), Range(0, 180)]
+      public float angle = 180f;
     }
 
 
     protected Interactable interactable;
     protected Interaction interaction;
-
 
     void Update() {
       // If an interaction is happening
@@ -54,7 +52,7 @@ namespace InteractionSystem {
           Update();
           return;
         }
-        if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key)) {
+        if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key) || !Complies(interaction)) {
           interactable.Deactivate();
           return;
         }
@@ -65,7 +63,7 @@ namespace InteractionSystem {
         Debug.DrawRay(pos, transform.forward * rayLength);
         RaycastHit hit;
         var prevInteractable = interactable;
-        if (Physics.Raycast(pos, transform.forward * rayLength, out hit, rayLength, mask)) {
+        if (Physics.Raycast(pos, transform.forward, out hit, rayLength, mask)) {
           // If hit interactable object
           if (hit.collider.TryGetComponent(out interactable)) {
             // Check if within the required distance
@@ -99,6 +97,29 @@ namespace InteractionSystem {
           }
         }
       }
+    }
+
+    bool Complies(Interaction interaction) {
+      if (restrictions.sigth) {
+        var len = restrictions.distance ? maxDistance : float.PositiveInfinity;
+        if (Physics.Raycast(interaction.sourcePos, transform.forward, out var hit, len, mask)) {
+          if (hit.collider.gameObject != interaction.target.gameObject) return false;
+        } else {
+          return false; // well if it didnt hit anything it definitely didnt hit the target
+        }
+      }
+      // Distance checking is done with the raycast if sigth is enabled!
+      if (restrictions.distance && !restrictions.sigth) {
+        if (interaction.distance > maxDistance) return false;
+      }
+
+      if (restrictions.angle < 180) {
+        var to = this.interaction.source.transform.forward;
+        var from = (this.interaction.targetPos - this.interaction.sourcePos).normalized;
+        if (Vector3.Angle(to, from) > restrictions.angle) return false;
+      }
+
+      return true;
     }
   }
 }

@@ -1,27 +1,31 @@
 ﻿
-/// <summary> Creates a decimal which loops after the specified maximum value to zero </summary>
+/// <summary> A decimal which loops from the specified threshold value to zero. The value never reaches the threshold. </summary>
 public readonly struct CircularDecimal {
 
   public readonly decimal value;
-  public readonly decimal max;
+  public readonly decimal ceil;
 
-  public static CircularDecimal operator +(CircularDecimal a, decimal b) => new CircularDecimal(a.value + b, a.max);
-  public static CircularDecimal operator -(CircularDecimal a, decimal b) => new CircularDecimal(a.value - b, a.max);
+  public static CircularDecimal operator +(CircularDecimal a, decimal b) => new CircularDecimal(a.value + b, a.ceil);
+  public static CircularDecimal operator ++(CircularDecimal a) => new CircularDecimal(a.value + 1, a.ceil);
+  public static CircularDecimal operator -(CircularDecimal a, decimal b) => new CircularDecimal(a.value - b, a.ceil);
+  public static CircularDecimal operator --(CircularDecimal a) => new CircularDecimal(a.value + 1, a.ceil);
 
   public static explicit operator int(CircularDecimal a) => (int)a.value;
   public static explicit operator float(CircularDecimal a) => (float)a.value;
   public static explicit operator double(CircularDecimal a) => (double)a.value;
   public static implicit operator decimal(CircularDecimal a) => a.value;
 
-  /// <summary> Creates an integer value which loops after the maximum to zero </summary>
-  public CircularDecimal(decimal value, decimal max) {
+  /// <summary> Creates an integer value which loops from threshold to zero. The value never reaches the threshold. </summary>
+  public CircularDecimal(decimal value, decimal threshold) {
 
-    if (max <= 0) throw new System.Exception($"Max value for {nameof(CircularDecimal)} must be higher than zero");
+    if (threshold <= 0) throw new System.Exception($"Max value for {nameof(CircularDecimal)} must be higher than zero");
 
-    if (value > max) value = value % max;
-    else if (value < 0) value = max + value % max;
+    if (value >= threshold) value = value == threshold ? 0 : value % threshold;
+    else if (value < 0) value = threshold + value % threshold;
 
     this.value = value;
-    this.max = max;
+    this.ceil = threshold;
   }
+
+  public new string ToString() => value.ToString();
 }
