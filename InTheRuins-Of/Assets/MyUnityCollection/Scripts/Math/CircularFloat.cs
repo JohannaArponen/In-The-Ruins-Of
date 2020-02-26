@@ -8,6 +8,10 @@ public readonly struct CircularFloat {
   public static CircularFloat operator +(CircularFloat a, float b) => new CircularFloat(a.value + b, a.max);
   public static CircularFloat operator -(CircularFloat a, float b) => new CircularFloat(a.value - b, a.max);
 
+  public static explicit operator int(CircularFloat a) => (int)a.value;
+  public static implicit operator float(CircularFloat a) => a.value;
+  public static implicit operator double(CircularFloat a) => a.value;
+  public static explicit operator decimal(CircularFloat a) => (decimal)a.value;
 
   /// <summary> Creates an integer value which loops after the maximum to zero </summary>
   public CircularFloat(float value, float max) {
