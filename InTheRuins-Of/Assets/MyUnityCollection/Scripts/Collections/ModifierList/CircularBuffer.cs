@@ -5,7 +5,7 @@ using System.Linq;
 
 /// <summary>
 /// Represents a first-in, first-out fixed size list of objects. 
-/// /// </summary>
+/// </summary>
 public class CircularBuffer<T> : IEnumerable<T> {
 
   public T this[int index] {

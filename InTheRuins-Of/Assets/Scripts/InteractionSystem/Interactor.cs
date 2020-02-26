@@ -30,6 +30,8 @@ namespace InteractionSystem {
     public class DeactivationRules {
       [Tooltip("Deactivate if the raycast no longer hits the " + nameof(Interactable))]
       public bool sigth = true;
+      [Tooltip("The mask used for the sight raycast")]
+      public LayerMask sigthMask;
 
       [Tooltip("Deactivate " + nameof(Interactable) + " if the maximum distance is exeeded")]
       public bool distance = true;
@@ -102,10 +104,10 @@ namespace InteractionSystem {
     bool Complies(Interaction interaction) {
       if (restrictions.sigth) {
         var len = restrictions.distance ? maxDistance : float.PositiveInfinity;
-        if (Physics.Raycast(interaction.sourcePos, transform.forward, out var hit, len, mask)) {
+        if (Physics.Raycast(interaction.sourcePos, transform.forward, out var hit, len, restrictions.sigthMask)) {
           if (hit.collider.gameObject != interaction.target.gameObject) return false;
         } else {
-          return false; // well if it didnt hit anything it definitely didnt hit the target
+          return false;
         }
       }
       // Distance checking is done with the raycast if sigth is enabled!
