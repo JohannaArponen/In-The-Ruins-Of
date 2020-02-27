@@ -137,6 +137,7 @@ public class FirstPersonAIO : MonoBehaviour {
   }
   public AdvancedSettings advanced = new AdvancedSettings();
   private CapsuleCollider capsule;
+  private LayerMask mask;
   private const float jumpRayLength = 0.7f;
   public bool IsGrounded { get; private set; }
   Vector2 inputXY;
@@ -294,7 +295,9 @@ public class BETA_SETTINGS{
     baseCamFOV = playerCamera.fieldOfView;
     #endregion
 
-    #region Movement Settings - Start  
+    #region Movement Settings - Start
+
+    for (int i = 0; i < 32; i++) if (!Physics.GetIgnoreLayerCollision(gameObject.layer, i)) mask = mask | (1 << i);
     staminaInternal = staminaLevel;
     advanced.zeroFrictionMaterial = new PhysicMaterial("Zero_Friction");
     advanced.zeroFrictionMaterial.dynamicFriction = 0;
@@ -402,7 +405,7 @@ public class BETA_SETTINGS{
     Ray ray = new Ray(transform.position - new Vector3(0, (capsule.height / 2) - 0.01f, 0), -transform.up);
     Debug.DrawLine(ray.origin, ray.origin - new Vector3(0, 0.05f, 0), Color.black);
     if (IsGrounded || fps_Rigidbody.velocity.y < 0.1) {
-      RaycastHit[] hits = Physics.RaycastAll(ray, 0.05f);
+      RaycastHit[] hits = Physics.RaycastAll(ray, 0.05f, mask);
       float nearest = float.PositiveInfinity;
       IsGrounded = false;
       for (int i = 0; i < hits.Length; i++) {
@@ -417,7 +420,7 @@ public class BETA_SETTINGS{
 
 
     if (advanced.maxSlopeAngle > 0) {
-      if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y - 0.75f, transform.position.z + 0.1f), Vector3.down, out advanced.surfaceAngleCheck, 1f)) {
+      if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y - 0.75f, transform.position.z + 0.1f), Vector3.down, out advanced.surfaceAngleCheck, 1f, mask)) {
 
         if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89) {
           advanced.tooSteep = false;
@@ -433,7 +436,7 @@ public class BETA_SETTINGS{
             dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0, -4, 0);
           }
         }
-      } else if (Physics.Raycast(new Vector3(transform.position.x - 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f)) {
+      } else if (Physics.Raycast(new Vector3(transform.position.x - 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f, mask)) {
 
         if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89) {
           advanced.tooSteep = false;
@@ -449,7 +452,7 @@ public class BETA_SETTINGS{
             dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0, -4, 0);
 
           }
-        } else if (Physics.Raycast(new Vector3(transform.position.x + 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f)) {
+        } else if (Physics.Raycast(new Vector3(transform.position.x + 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f, mask)) {
 
           if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89) {
             advanced.tooSteep = false;
@@ -586,7 +589,7 @@ public class BETA_SETTINGS{
     if (fsmode == FSMode.Dynamic) {
       Vector3 dwn = Vector3.down;
       RaycastHit hit = new RaycastHit();
-      if (Physics.Raycast(transform.position, dwn, out hit)) {
+      if (Physics.Raycast(transform.position, dwn, out hit, 1f, mask)) {
         dynamicFootstep.currentClipSet = (dynamicFootstep.woodPhysMat && hit.collider.sharedMaterial == dynamicFootstep.woodPhysMat && dynamicFootstep.woodClipSet.Any()) ? // If standing on Wood
         dynamicFootstep.woodClipSet : ((dynamicFootstep.grassPhysMat && hit.collider.sharedMaterial == dynamicFootstep.grassPhysMat && dynamicFootstep.grassClipSet.Any()) ? // If standing on Grass
         dynamicFootstep.grassClipSet : ((dynamicFootstep.metalAndGlassPhysMat && hit.collider.sharedMaterial == dynamicFootstep.metalAndGlassPhysMat && dynamicFootstep.metalAndGlassClipSet.Any()) ? // If standing on Metal/Glass
