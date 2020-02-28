@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System;
 
 /// <summary>
 /// Represents a first-in, first-out fixed size list of objects. 
@@ -26,8 +27,14 @@ public class CircularBuffer<T> : IEnumerable<T> {
     var b = a.AsReadOnly();
   }
 
-  public void Push(T item) {
+  public void Add(T item) {
     data[++head] = item;
+  }
+
+  internal void Clear() {
+    for (int i = 0; i < data.Length; i++) {
+      data[i] = default(T);
+    }
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -40,4 +47,5 @@ public class CircularBuffer<T> : IEnumerable<T> {
   public ReadOnlyCollection<T> AsReadOnly() => new ReadOnlyCollection<T>(this.ToArray());
 
   public new string ToString() => string.Join(", ", this.ToArray());
+
 }

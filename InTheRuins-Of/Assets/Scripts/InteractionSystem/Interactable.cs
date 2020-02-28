@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -30,6 +31,16 @@ namespace InteractionSystem {
     /// <summary> The current interaction or null </summary>
     public Interaction interaction { get; protected set; }
 
+    public void AddActivationEventListeners(UnityAction<Interaction> onActivate, UnityAction<Interaction> onActive, UnityAction<Interaction> onDeactivate) {
+      this.onActivate.AddListener(onActivate);
+      this.onActive.AddListener(onActive);
+      this.onDeactivate.AddListener(onDeactivate);
+    }
+    public void AddActivationEventListeners(UnityAction<Interaction> onActivate, UnityAction<Interaction> onDeactivate) {
+      this.onActivate.AddListener(onActivate);
+      this.onDeactivate.AddListener(onDeactivate);
+    }
+
     public void Target() {
       if (targeted) {
         Debug.LogWarning($"Trying to target an {nameof(Interactable)} multiple times");
@@ -49,7 +60,7 @@ namespace InteractionSystem {
 
     /// <summary>
     /// Activates the Interactable.  
-    /// If the Interactable is targeted, it is untargeted.  
+    /// If the Interactable is targeted, it will be untargeted.  
     /// </summary>
     public Interaction Activate(Interactor source) {
       if (targeted) Untarget();

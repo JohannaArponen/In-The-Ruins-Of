@@ -5,6 +5,7 @@
 ///
 /// DATE || msg: "" || Author Signature: SNG || version VERSION
 ///
+/// 26/02/20 || msg: "Raycasts now use a copy of the GameObject's collision mask" || Author Signature: Samuel Förström || version: 19.9.21f >> 19.9.22f 
 /// 17/02/20 || msg: "Fixed input checking being done in FixedUpdate, causing incosistent jumping and crouching." || Author Signature: Samuel Förström || version: 19.9.20f >> 19.9.21f 
 /// 10/17/19 || msg: "Fixed inconsistant jumping/ground detection. Fixed headbobing axis amplification. Added toggle crouching." || Author Signature: Aedan Graves || version: 19.9.20f >> 19.10.17f 
 /// 09/20/19 || msg: "Added support Email to the bottom of the inspector. Fixed issues with sticking to the walls. Removed the need for external assigning of a min and max friction material" || Author Signature: Aedan Graves || version: 19.9.13 >> 19.9.20f
