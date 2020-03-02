@@ -13,7 +13,16 @@ namespace InteractionSystem {
     public Vector3 sourcePos { get => source.transform.position; }
     public Vector3 targetPos { get => target.transform.position; }
 
-    public float distance { get => Vector3.Distance(sourcePos, targetPos); }
+    /// <summary> Vector between source and target </summary>
+    public Vector3 dir {
+      get => targetPos - sourcePos;
+      set => target.transform.position = sourcePos + value;
+    }
+
+    public float distance {
+      get => Vector3.Distance(sourcePos, targetPos);
+      set => target.transform.position = sourcePos + dir * value;
+    }
 
     public float duration { get => ended ? endTime - startTime : Time.time - startTime; }
 
@@ -32,10 +41,7 @@ namespace InteractionSystem {
 
     public void End() => End(Time.time);
     public void End(float time) {
-      if (ended) {
-        Debug.LogWarning("Tried to end an interaction multiple times");
-        return;
-      }
+      if (ended) return;
       ended = true;
       endTime = time;
     }

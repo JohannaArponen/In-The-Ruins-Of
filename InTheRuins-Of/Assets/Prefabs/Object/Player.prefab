@@ -439,6 +439,21 @@ MonoBehaviour:
               m_StringArgument: Swing2
               m_BoolArgument: 0
             m_CallState: 2
+--- !u!114 &1754260215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161548113343774995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c58c1b6b24d50f44a83dccd688fe03dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  perTargetCooldown: 0
+  cooldown: 1
 --- !u!1 &7368967116306351558
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,13 +501,16 @@ MonoBehaviour:
   rayLength: 5
   mask:
     serializedVersion: 2
-    m_Bits: 8192
+    m_Bits: 295
   key: 101
   type: 0
-  deactivationRules:
+  restrictions:
     sigth: 1
+    sigthMask:
+      serializedVersion: 2
+      m_Bits: 295
     distance: 1
-    angle: 360
+    angle: 45
 --- !u!1001 &2161548114079567444
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -589,6 +607,12 @@ Transform:
 --- !u!95 &8523116944402654144 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7761792581534182804, guid: c232df654614abb449772ed3630b0c24,
+    type: 3}
+  m_PrefabInstance: {fileID: 2161548114079567444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2161548113343774995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 879054663, guid: c232df654614abb449772ed3630b0c24,
     type: 3}
   m_PrefabInstance: {fileID: 2161548114079567444}
   m_PrefabAsset: {fileID: 0}

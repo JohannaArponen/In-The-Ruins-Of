@@ -12,53 +12,43 @@ using UnityEditor;
 
 namespace MyBox {
   public class MinMaxRangeAttribute : PropertyAttribute {
-    public MinMaxRangeAttribute(float x, float y) {
-      this.x = x;
-      this.y = y;
+    public MinMaxRangeAttribute(float min, float max) {
+      this.min = min;
+      this.max = max;
     }
 
-    public readonly float x;
-    public readonly float y;
+    public readonly float min;
+    public readonly float max;
   }
 
   [Serializable]
-  public struct RangedFloat {
-    public float x;
-    public float y;
+  public struct FloatRange {
+    public float min;
+    public float max;
 
-    public RangedFloat(float x, float y) {
-      this.x = x;
-      this.y = y;
+    public FloatRange(float min, float max) {
+      this.min = min;
+      this.max = max;
     }
   }
 
   [Serializable]
-  public struct RangedInt {
-    public int x;
-    public int y;
+  public struct IntRange {
+    public int min;
+    public int max;
 
-    public RangedInt(int x, int y) {
-      this.x = x;
-      this.y = y;
+    public IntRange(int min, int max) {
+      this.min = min;
+      this.max = max;
     }
   }
 
   public static class RangedExtensions {
-    public static float LerpFromRange(this RangedFloat ranged, float t) {
-      return Mathf.Lerp(ranged.x, ranged.y, t);
-    }
+    public static float Lerp(this FloatRange ranged, float t) => Mathf.Lerp(ranged.min, ranged.max, t);
+    public static float LerpUnclamped(this FloatRange ranged, float t) => Mathf.LerpUnclamped(ranged.min, ranged.max, t);
 
-    public static float LerpFromRangeUnclamped(this RangedFloat ranged, float t) {
-      return Mathf.LerpUnclamped(ranged.x, ranged.y, t);
-    }
-
-    public static float LerpFromRange(this RangedInt ranged, float t) {
-      return Mathf.Lerp(ranged.x, ranged.y, t);
-    }
-
-    public static float LerpFromRangeUnclamped(this RangedInt ranged, float t) {
-      return Mathf.LerpUnclamped(ranged.x, ranged.y, t);
-    }
+    public static float Lerp(this IntRange ranged, float t) => Mathf.Lerp(ranged.min, ranged.max, t);
+    public static float LerpUnclamped(this IntRange ranged, float t) => Mathf.LerpUnclamped(ranged.min, ranged.max, t);
   }
 }
 
@@ -67,12 +57,12 @@ namespace MyBox.Internal {
   [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
   public class MinMaxRangeIntAttributeDrawer : PropertyDrawer {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-      SerializedProperty xProp = property.FindPropertyRelative("x");
-      SerializedProperty yProp = property.FindPropertyRelative("y");
+      SerializedProperty xProp = property.FindPropertyRelative("x") ?? property.FindPropertyRelative("min");
+      SerializedProperty yProp = property.FindPropertyRelative("y") ?? property.FindPropertyRelative("max");
       if (xProp == null || yProp == null) {
         WarningsPool.Log("MinMaxRangeAttribute used on <color=brown>" +
                          property.name +
-                         "</color>. Must be used on types with x and y fields",
+                         "</color>. Must be used on types with x/min and y/max fields",
           property.serializedObject.targetObject);
 
         return;
@@ -83,7 +73,7 @@ namespace MyBox.Internal {
       if (!maxValid || !minValid || xProp.propertyType != yProp.propertyType) {
         WarningsPool.Log("MinMaxRangeAttribute used on <color=brown>" +
                          property.name +
-                         "</color>. Min and Max fields must be of int or float type",
+                         "</color>. x/min and y/max fields must be of int or float type",
           property.serializedObject.targetObject);
 
         return;
@@ -98,8 +88,8 @@ namespace MyBox.Internal {
 
       float xValue = isInt ? xProp.intValue : xProp.floatValue;
       float yValue = isInt ? yProp.intValue : yProp.floatValue;
-      float rangeMin = rangeAttribute.x;
-      float rangeMax = rangeAttribute.y;
+      float rangeMin = rangeAttribute.min;
+      float rangeMax = rangeAttribute.max;
 
 
       const float rangeBoundsLabelWidth = 40f;
