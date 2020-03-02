@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Interactable : MonoBehaviour{
+public class Inter_actableS : MonoBehaviour{
 
     public float radius = 3f;
     public Transform interactionTransform;
