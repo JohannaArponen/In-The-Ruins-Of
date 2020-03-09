@@ -4,7 +4,6 @@ using UnityEngine;
 using Unity.Mathematics;
 using MyBox;
 
-
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
@@ -47,6 +46,7 @@ namespace InteractionSystem {
     private Interaction interaction;
     private float targetDistance;
     private bool usedGravity;
+    private List<Collider> awaitingCols = new List<Collider>();
 
     void OnValidate() {
       sampleCount = math.max(3, sampleCount);
@@ -61,14 +61,20 @@ namespace InteractionSystem {
     }
 
     void Update() {
-      // awaitingEndOfCollision
-    }
+      if (waitCollisionEnd && awaitingCols.Count > 0) {
+        var col = GetComponent<Collider>();
 
-    // !!! WILL NOT BE TRIGGERED BECAUSE YOU IGNORED THE COLLISION
-    void OnCollisionExit(Collision collision) {
-      var res = rb.SweepTestAll(Vector3.forward, 0);
-      if (waitCollisionEnd && interaction && interaction.ended && collision.collider == interaction.source.associatedCollider) {
-        Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider, false);
+        // We must unignore before sweeping or we dont hit the colliders
+        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, false);
+        var cols = rb.SweepTestAll(Vector3.forward, 0).Map(hit => hit.collider);
+        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, true);
+
+        foreach (var awaitingCol in awaitingCols) {
+          if (cols.IndexOfItem(awaitingCol) == -1) {
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider, false);
+            awaitingCols.Remove(awaitingCol);
+          }
+        }
       }
     }
 
@@ -103,8 +109,10 @@ namespace InteractionSystem {
 
     public void OnDeactive(Interaction inter) {
       rb.useGravity = usedGravity;
-      if (interaction.source.associatedCollider && !waitCollisionEnd)
-        Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider, false);
+      var assCol = interaction.source.associatedCollider;
+      if (assCol && waitCollisionEnd) {
+        if (!awaitingCols.Contains(assCol)) awaitingCols.Add(assCol);
+      }
       var count = 0;
       Sample merged = new Sample(Vector3.zero, 0);
       foreach (var sample in samples) {
