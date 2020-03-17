@@ -502,15 +502,16 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 295
+  associatedCollider: {fileID: 136239539305442568}
   key: 101
   type: 0
   restrictions:
-    sigth: 1
+    sigth: 0
     sigthMask:
       serializedVersion: 2
       m_Bits: 295
-    distance: 1
-    angle: 45
+    distance: 0
+    angle: 180
 --- !u!1001 &2161548114079567444
 PrefabInstance:
   m_ObjectHideFlags: 0

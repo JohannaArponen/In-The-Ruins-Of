@@ -14,6 +14,9 @@ namespace InteractionSystem {
     [Tooltip("Layer mask used for raycast")]
     public LayerMask mask;
 
+    [Tooltip("When interacting with a dynamic/movable " + nameof(Interactable) + " ignore collisions of this collider and the target collider")]
+    public Collider associatedCollider;
+
     [MyBox.SearchableEnum]
     public KeyCode key = KeyCode.E;
 
@@ -24,7 +27,6 @@ namespace InteractionSystem {
     )]
     public Type type = Type.Hold;
     public enum Type { Hold, Toggle, Instant }
-
     public DeactivationRules restrictions;
     [System.Serializable]
     public class DeactivationRules {

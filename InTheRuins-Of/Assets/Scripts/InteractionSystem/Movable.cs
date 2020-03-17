@@ -4,7 +4,6 @@ using UnityEngine;
 using Unity.Mathematics;
 using MyBox;
 
-
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
@@ -14,7 +13,7 @@ namespace InteractionSystem {
       "The maximum amount of samples to take from previous positions for velocity calculation.\n\n" +
       "Higher values reduce the chance of small movements affecting the throw in an unwanted manner."
     )]
-    public int sampleCount = 2;
+    public int sampleCount = 3;
 
     [
       Tooltip("Keep distance from the " + nameof(Interactor) + " within this range (from 0 to maximum interaction distance)"),
@@ -24,6 +23,12 @@ namespace InteractionSystem {
 
     [Tooltip("Move " + nameof(Interactable) + " to the center of the " + nameof(Interactor) + "'s ray")]
     public bool restrictCenter;
+
+    [Tooltip("Multiplier of movement towards desired point")]
+    public float moveVelocityWhenColliding = 20;
+
+    [Tooltip("Enable collision when no longer colliding with the " + nameof(Interactor) + " instead of immediately")]
+    public bool waitCollisionEnd = true;
 
     public bool3 restrictRotation;
     public bool3 restrictPosition;
@@ -41,10 +46,10 @@ namespace InteractionSystem {
     private Interaction interaction;
     private float targetDistance;
     private bool usedGravity;
-
+    private List<Collider> awaitingCols = new List<Collider>();
 
     void OnValidate() {
-      sampleCount = math.max(2, sampleCount);
+      sampleCount = math.max(3, sampleCount);
       samples = new CircularBuffer<Sample>(sampleCount);
     }
 
@@ -55,10 +60,30 @@ namespace InteractionSystem {
       interactable.AddActivationEventListeners(OnActivate, OnActive, OnDeactive);
     }
 
+    void Update() {
+      if (waitCollisionEnd && awaitingCols.Count > 0) {
+        var col = GetComponent<Collider>();
+
+        // We must unignore before sweeping or we dont hit the colliders
+        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, false);
+        var cols = rb.SweepTestAll(Vector3.forward, 0).Map(hit => hit.collider);
+        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, true);
+
+        foreach (var awaitingCol in awaitingCols) {
+          if (cols.IndexOfItem(awaitingCol) == -1) {
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider, false);
+            awaitingCols.Remove(awaitingCol);
+          }
+        }
+      }
+    }
+
     public void OnActivate(Interaction inter) {
       if (interaction && !interaction.ended) inter.End();
       interaction = inter;
       usedGravity = rb.useGravity;
+      if (inter.source.associatedCollider)
+        Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider);
       rb.useGravity = false;
       var maxDir = inter.dir.SetLen(inter.source.maxDistance);
       Line line = new Line(
@@ -73,11 +98,21 @@ namespace InteractionSystem {
     public void OnActive(Interaction inter) {
       samples.Add(new Sample(transform.position, Time.deltaTime));
       var targetPos = inter.sourcePos + (inter.dir.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
-      rb.MovePosition(targetPos);
+      var dir = targetPos - transform.position;
+      if (rb.SweepTest(dir.normalized, out var hit, dir.magnitude * 1.1f)) {
+        rb.velocity = dir * moveVelocityWhenColliding;
+      } else {
+        rb.velocity = Vector3.zero;
+        rb.MovePosition(targetPos);
+      }
     }
 
     public void OnDeactive(Interaction inter) {
       rb.useGravity = usedGravity;
+      var assCol = interaction.source.associatedCollider;
+      if (assCol && waitCollisionEnd) {
+        if (!awaitingCols.Contains(assCol)) awaitingCols.Add(assCol);
+      }
       var count = 0;
       Sample merged = new Sample(Vector3.zero, 0);
       foreach (var sample in samples) {
@@ -88,11 +123,13 @@ namespace InteractionSystem {
           merged.delta += sample.delta;
         }
       }
-      // Need atleast 2 samples
-      if (count >= 2) {
-        Sample avg = new Sample(merged.pos / count, merged.delta / count);
+      // Need atleast 3 valid samples
+      if (count >= 3) {
         var oldest = samples[samples.Length - 1].pos;
-        rb.velocity = (oldest - avg.pos) / avg.delta;
+        var vel = -(oldest - merged.pos / (count - 1)) / merged.delta;
+        rb.velocity = vel;
+      } else {
+        rb.velocity = Vector3.zero;
       }
     }
   }
